@@ -36,3 +36,5 @@ X = 1/N*fftshift(fft(x,N));
 
 %%%%%       Parte 3: Densidad Espectral de Potencia
 Sxx = periodogram(x,rectwin(N),N,FS,'onesided');
+figure (2);
+plot(f,10*log10(Sxx));zoom;
