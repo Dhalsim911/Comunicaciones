@@ -33,6 +33,35 @@ Px = P1 + P2 + P3
 
 %%%%%       Parte 2: Transformada de Fourier
 X = 1/N*fftshift(fft(x,N));
+inicio=-FS/2;
+paso= FS/N;
+final=FS/2-FS/N;
+VF= (inicio:paso:final).';
+REAL=real(X);
+IMAG=imag(X);
+
+figure (2);
+plot(VF,REAL);
+%stem(VF,REAL);
+xlabel('Frecuencia (Hz)');
+ylabel('Parte real');
+legend('Re{X(f)}');
+
+figure (3);
+plot(VF,IMAG);
+%stem(VF,IMAG);
+xlabel('Frecuencia (Hz)');
+ylabel('Parte imaginaria');
+legend('Img{X(f)}');
+
+MAG=abs(X);
+figure (4);
+%plot(VF,IMAG);
+stem(VF,MAG);
+xlabel('Frecuencia (Hz)');
+ylabel('Magnitud');
+legend('|X(f)|');
+
 
 %%%%%       Parte 3: Densidad Espectral de Potencia
 Sxx = periodogram(x,rectwin(N),N,FS,'onesided');
