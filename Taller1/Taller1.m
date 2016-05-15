@@ -3,12 +3,8 @@ syms t1
 A1 = 0.7;
 A2 = 0.3;
 A3 = 0.4;
-f1 = 370;
-f2 = 3*f1;
-f3 = 5*f1;
-T1 = 1/f1;
-T2 = 1/f2;
-T3 = 1/f3;
+f = 370;
+T = 1/f;
 FS = 32*f1;
 N = 256;
 fin =((N-1)/FS);
@@ -17,7 +13,7 @@ t = (0:itv:fin).';
 
 %%%%%       Parte 1: Estudio Preliminar
 % Calculo y plot de x(t)
-x = A1*cos(2*pi*f1*t) + A2*sin(2*pi*f2*t) + A3*cos(2*pi*f3*t);
+x = A1*cos(2*pi*f*t) + A2*sin(2*pi*3*f*t) + A3*cos(2*pi*5*f*t);
 figure (1);
 plot(t,x);
 xlabel('tiempo (s)');
@@ -25,13 +21,13 @@ ylabel('Amplitud');
 legend('x(t)');
 
 %Calculo de la potencia promedio Px(t)
-x1 = A1*cos(2*pi*f1*t1);
-x2 = A2*sin(2*pi*f2*t1);
-x3 = A3*cos(2*pi*f3*t1);
+x1 = A1*cos(2*pi*f*t1);
+x2 = A2*sin(2*pi*3*f*t1);
+x3 = A3*cos(2*pi*5*f*t1);
 
-P1 = (1/T1)*(int(x1^2,0,T1));
-P2 = (1/T2)*(int((x2)^2,0,T2));
-P3 = (1/T3)*(int((x3)^2,0,T3));
+P1 = (1/T)*(int(x1^2,0,T));
+P2 = (1/T)*(int((x2)^2,0,T));
+P3 = (1/T)*(int((x3)^2,0,T));
 %Por superposicion calculo Px
 Px = P1 + P2 + P3
 
