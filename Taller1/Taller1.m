@@ -65,6 +65,7 @@ legend('|X(f)|');
 
 %%%%%       Parte 3: Densidad Espectral de Potencia
 Sxx = periodogram(x,rectwin(N),N,FS,'onesided');
+<<<<<<< HEAD
 Sxx = FS/N*Sxx(1:N/2)';
 SxxdB = 10*log10(Sxx); 
 figure (5);
@@ -73,3 +74,5 @@ length(SxxdB)
 plot(VF,SxxdB);
 xlabel('Frecuencia (Hz)');
 ylabel('Amplitud (dB)');
+VF2= (0:paso:final).';
+plot(VF2,10*log10(Sxx));zoom;
