@@ -24,11 +24,10 @@ legend('x(t)');
 x1 = A1*cos(2*pi*f*t1);
 x2 = A2*sin(2*pi*3*f*t1);
 x3 = A3*cos(2*pi*5*f*t1);
-
-P1 = (1/T)*(int(x1^2,0,T));
+P = mean(x.^2)
+P = (1/T)*(int(x1^2,0,T));
 P2 = (1/T)*(int((x2)^2,0,T));
 P3 = (1/T)*(int((x3)^2,0,T));
-%Por superposicion calculo Px
 Px = P1 + P2 + P3
 
 %%%%%       Parte 2: Transformada de Fourier
@@ -74,3 +73,15 @@ figure (5);
 plot(VF2,SxxdB);
 xlabel('Frecuencia (Hz)');
 ylabel('Amplitud (dB)');
+legend('Sxx');
+
+Px = sum(Sxx)
+
+Sxx1 = 2*abs(X(N/2+1:N)).^2;
+Px1 = sum(Sxx1)
+Sxx1dB = 10*log10(Sxx1);
+figure (6);
+plot(VF2,Sxx1dB);
+xlabel('Frecuencia (Hz)');
+ylabel('Amplitud (dB)');
+legend('Sxx1');
