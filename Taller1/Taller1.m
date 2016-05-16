@@ -5,7 +5,7 @@ A2 = 0.3;
 A3 = 0.4;
 f = 370;
 T = 1/f;
-FS = 32*f1;
+FS = 32*f;
 N = 256;
 fin =((N-1)/FS);
 itv = 1/FS;
@@ -65,5 +65,8 @@ legend('|X(f)|');
 
 %%%%%       Parte 3: Densidad Espectral de Potencia
 Sxx = periodogram(x,rectwin(N),N,FS,'onesided');
+VF2= (0:paso:final).';
+length(VF2)
+length(Sxx)
 figure (2);
-plot(f,10*log10(Sxx));zoom;
+plot(VF2,10*log10(Sxx));zoom;
