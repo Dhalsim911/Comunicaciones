@@ -85,3 +85,23 @@ plot(VF2,Sxx1dB);
 xlabel('Frecuencia (Hz)');
 ylabel('Amplitud (dB)');
 legend('Sxx1');
+
+%%%%%       Parte 4: Filtrado
+D = designfilt('lowpassfir','FilterOrder',32,'HalfPowerFrequency',3*900,'SampleRate',32*370);
+[h,w] = freqz(D);
+figure (7);
+h1 = abs(h);
+hdB = 10*log10(h1);
+freq = w/(2*pi);
+plot(freq,h1);
+xlabel('Frecuencia (Hz)');
+ylabel('Amplitud');
+legend('H(f)');
+y = filtfilt(D,x); 
+y1 = filter(D,x);
+Y = 1/N*fftshift(fft(y,N));
+figure (8);
+stem(VF,Y);
+xlabel('frecuencia (Hz)');
+ylabel('Amplitud ');
+legend('Y(f)');
