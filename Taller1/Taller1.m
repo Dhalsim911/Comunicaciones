@@ -4,6 +4,7 @@ A1 = 0.7;
 A2 = 0.3;
 A3 = 0.4;
 f = 370;
+f2=3*f;
 T = 1/f;
 FS = 32*f;
 N = 256;
@@ -25,7 +26,7 @@ x1 = A1*cos(2*pi*f*t1);
 x2 = A2*sin(2*pi*3*f*t1);
 x3 = A3*cos(2*pi*5*f*t1);
 P = mean(x.^2)
-P = (1/T)*(int(x1^2,0,T));
+P1 = (1/T)*(int(x1^2,0,T));
 P2 = (1/T)*(int((x2)^2,0,T));
 P3 = (1/T)*(int((x3)^2,0,T));
 Px = P1 + P2 + P3
@@ -40,18 +41,16 @@ REAL=real(X);
 IMAG=imag(X);
 
 figure (2);
-plot(VF,REAL);
-%stem(VF,REAL);
+%plot(VF,REAL);
+stem(VF,REAL);
 xlabel('Frecuencia (Hz)');
-ylabel('Parte real');
-legend('Re{X(f)}');
+ylabel('Re(X(f))');
 
 figure (3);
-plot(VF,IMAG);
-%stem(VF,IMAG);
+%plot(VF,IMAG);
+stem(VF,IMAG);
 xlabel('Frecuencia (Hz)');
-ylabel('Parte imaginaria');
-legend('Img{X(f)}');
+ylabel('Img (X(f))');
 
 MAG=abs(X);
 figure (4);
@@ -85,15 +84,14 @@ plot(VF2,Sxx1dB);
 xlabel('Frecuencia (Hz)');
 ylabel('Amplitud (dB)');
 legend('Sxx1');
-
 %%%%%       Parte 4: Filtrado
-D = designfilt('lowpassfir','FilterOrder',32,'HalfPowerFrequency',3*900,'SampleRate',32*370);
-[h,w] = freqz(D);
+D = designfilt('lowpassfir','FilterOrder',32,'HalfPowerFrequency',f2,'SampleRate',FS);
+[h,w] = freqz(D,N,FS);
 figure (7);
 h1 = abs(h);
 hdB = 10*log10(h1);
 freq = w/(2*pi);
-plot(freq,h1);
+plot(w,h1);
 xlabel('Frecuencia (Hz)');
 ylabel('Amplitud');
 legend('H(f)');
@@ -101,7 +99,7 @@ y = filtfilt(D,x);
 y1 = filter(D,x);
 Y = 1/N*fftshift(fft(y,N));
 figure (8);
-stem(VF,Y);
+stem(VF,abs(Y));
 xlabel('frecuencia (Hz)');
 ylabel('Amplitud ');
 legend('Y(f)');
