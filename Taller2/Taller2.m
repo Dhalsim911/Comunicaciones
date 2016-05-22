@@ -53,7 +53,8 @@ ylabel('Magnitud');
 legend('|X(f)|');
 
 %%%% Parte 2: Modulacioon AM convencional %%%$
-s = x.*c;
+x1 = (1 + x);
+s = x1.*c;
 figure(5);
 plot(t,s);
 xlabel('Tiempo (s)');
@@ -70,8 +71,8 @@ xlabel('Frecuencia (Hz)');
 ylabel('Magnitud');
 legend('|S(f)|');
 
-sb = 2*x.*c;
-xc = 3*x;
+sb = 2*x1.*c;
+xc = 3*x1;
 cc = 4*c;
 sc = xc.*cc;
 figure(7);
@@ -90,3 +91,21 @@ plot(t,sc);
 xlabel('Tiempo (s)');
 ylabel('Amplitud');
 legend('s_c(t)');
+
+%%%% Parte 3: Modulación AM DSB-SC %%%%
+s2 = x.*c;
+figure(5);
+plot(t,s2);
+xlabel('Tiempo (s)');
+ylabel('Amplitud');
+legend('Señal modulada s2(t)');
+
+S2 = 1/N*fftshift(fft(s2,N));
+REAL_S2 = real(S2);
+IMAG_S2 = imag(S2);
+MAG_S2=abs(S2);
+figure (8);
+stem(VF,MAG_S2);
+xlabel('Frecuencia (Hz)');
+ylabel('Magnitud');
+legend('|S2(f)|');
