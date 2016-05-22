@@ -104,8 +104,48 @@ S2 = 1/N*fftshift(fft(s2,N));
 REAL_S2 = real(S2);
 IMAG_S2 = imag(S2);
 MAG_S2=abs(S2);
-figure (8);
+figure(8);
 stem(VF,MAG_S2);
 xlabel('Frecuencia (Hz)');
 ylabel('Magnitud');
 legend('|S2(f)|');
+
+%%%% Parte 4: Demodulación AM DSB-SC %%%%
+y1 = s.*c;
+D = designfilt('lowpassfir','FilterOrder',32,'HalfPowerFrequency',fc,'SampleRate',FS);
+y1 = filter(D,y1);
+y1 = 2*y1;
+y2 = s2.*c;
+y2 = filter(D,y2);
+y2 = 2*y2;
+figure(9);
+subplot(2,1,1)
+plot(t,y1);
+xlabel('Tiempo (s)');
+ylabel('Amplitud');
+legend('y_1^*(t)');
+subplot(2,1,2)
+plot(t,y2);
+xlabel('Tiempo (s)');
+ylabel('Amplitud');
+legend('y_2^*(t)');
+
+Y1 = 1/N*fftshift(fft(y1,N));
+REAL_Y1 = real(Y1);
+IMAG_Y1 = imag(Y1);
+MAG_Y1=abs(Y1);
+figure(10);
+stem(VF,MAG_Y1);
+xlabel('Frecuencia (Hz)');
+ylabel('Magnitud');
+legend('|Y1(f)|');
+
+Y2 = 1/N*fftshift(fft(y2,N));
+REAL_Y2 = real(Y2);
+IMAG_Y2 = imag(Y2);
+MAG_Y2=abs(Y2);
+figure(11);
+stem(VF,MAG_Y2);
+xlabel('Frecuencia (Hz)');
+ylabel('Magnitud');
+legend('|Y2(f)|');
