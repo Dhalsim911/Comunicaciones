@@ -1,4 +1,5 @@
 %%% Definicion de variables publicas %%%
+syms t1
 A1 = 0.7;
 A2 = 0.3;
 A3 = 0.4;
@@ -140,3 +141,76 @@ stem(VF,MAG_Y2);
 xlabel('Frecuencia (Hz)');
 ylabel('Magnitud');
 legend('|Y2(f)|');
+
+%%%% Reto: Multiplexación en FM estéreo  %%%
+[audio,FSa] = audioread('blood_brothers.wav');
+%plot(audio);
+Na = 529200;
+paso_a = 1/(4*44100);
+fin_a = 3 - paso_a; 
+ta = (0:paso_a:fin_a).';
+inicio_VFa = -FSa/2;
+fin_VFa = FSa/2-FSa/Na;
+paso_VFa = FSa/Na;
+VF_aud = (inicio_VFa:paso_VFa:fin_VFa);
+wL = audio(1:132300,1);
+wR = audio(1:132300,2);
+wL = interp(wL,4);
+wR = interp(wR,4);
+
+figure(12);
+subplot(2,1,1)
+plot(ta,wL);
+xlabel('tiempo (s)');
+ylabel('Amplitud');
+legend('wL');
+subplot(2,1,2)
+plot(ta,wR);
+xlabel('tiempo (s)');
+ylabel('Amplitud');
+legend('wR'); 
+
+A = (wL+wR)/2;
+B = (wL-wR)/2;
+sFM = A + B.*cos(2*pi*38000*ta) + 0.2*cos(2*pi*19000*ta);
+figure(13);
+plot(ta,sFM);
+xlabel('tiempo (s)');
+ylabel('Amplitud');
+legend('sFM');
+
+SFM = 1/Na*fftshift(fft(sFM,Na));
+MAG_SFM=abs(SFM);
+figure(14);
+stem(VF_aud,MAG_SFM);
+fca = 15000;
+E = designfilt('lowpassfir','FilterOrder',32,'HalfPowerFrequency',fca,'SampleRate',FSa);
+vL = filter(E,sFM);
+sFM = sFM.*cos(2*pi*38000*ta);
+vR = filter(E,sFM);
+vL = decimate(vL,4);
+vR = decimate(vR,4);
+ta2 = decimate(ta,4);
+figure(15);
+subplot(2,1,1)
+plot(ta,wL);
+xlabel('tiempo (s)');
+ylabel('Amplitud');
+legend('wL');
+subplot(2,1,2)
+plot(ta2,vL);
+xlabel('tiempo (s)');
+ylabel('Amplitud');
+legend('vL');
+
+figure(16);
+subplot(2,1,1)
+plot(ta,wR);
+xlabel('tiempo (s)');
+ylabel('Amplitud');
+legend('wR');
+subplot(2,1,2)
+plot(ta2,vR);
+xlabel('tiempo (s)');
+ylabel('Amplitud');
+legend('vR');
