@@ -92,15 +92,15 @@ legend('s_c(t), m=0.9');
 
 %%%% Parte 3: Modulación AM DSB-SC %%%%
 s2 = x.*c;
-figure(5);
+figure(8);
 plot(t,s2);
 xlabel('Tiempo (s)');
 ylabel('Amplitud');
-legend('Señal modulada s2(t)');
+legend('Señal modulada s2(t), AM DSB-SC');
 
 S2 = 1/N*fftshift(fft(s2,N));
 MAG_S2=abs(S2);
-figure(8);
+figure(9);
 stem(VF,MAG_S2);
 xlabel('Frecuencia (Hz)');
 ylabel('Magnitud');
@@ -114,7 +114,7 @@ y1 = 2*y1;
 y2 = s2.*c;
 y2 = filter(D,y2);
 y2 = 2*y2;
-figure(9);
+figure(10);
 subplot(2,1,1)
 plot(t,y1);
 xlabel('Tiempo (s)');
@@ -128,7 +128,7 @@ legend('y_2^*(t)');
 
 Y1 = 1/N*fftshift(fft(y1,N));
 MAG_Y1=abs(Y1);
-figure(10);
+figure(11);
 stem(VF,MAG_Y1);
 xlabel('Frecuencia (Hz)');
 ylabel('Magnitud');
@@ -136,7 +136,7 @@ legend('|Y1(f)|');
 
 Y2 = 1/N*fftshift(fft(y2,N));
 MAG_Y2=abs(Y2);
-figure(11);
+figure(12);
 stem(VF,MAG_Y2);
 xlabel('Frecuencia (Hz)');
 ylabel('Magnitud');
@@ -146,7 +146,7 @@ legend('|Y2(f)|');
 [audio,FSa] = audioread('blood_brothers.wav');
 %plot(audio);
 Na = 529200;
-paso_a = 1/(4*44100);
+paso_a = 1/(4*FSa);
 fin_a = 3 - paso_a; 
 ta = (0:paso_a:fin_a).';
 inicio_VFa = -FSa/2;
@@ -158,7 +158,7 @@ wR = audio(1:132300,2);
 wL = interp(wL,4);
 wR = interp(wR,4);
 
-figure(12);
+figure(13);
 subplot(2,1,1)
 plot(ta,wL);
 xlabel('tiempo (s)');
@@ -172,8 +172,8 @@ legend('wR');
 
 A = (wL+wR)/2;
 B = (wL-wR)/2;
-sFM = A + B.*cos(2*pi*38000*ta) + 0.2*cos(2*pi*19000*ta);
-figure(13);
+sFM = A + B.*cos(2*pi*38000*ta) + 0.1*cos(2*pi*19000*ta);
+figure(14);
 plot(ta,sFM);
 xlabel('tiempo (s)');
 ylabel('Amplitud');
@@ -181,7 +181,7 @@ legend('sFM');
 
 SFM = 1/Na*fftshift(fft(sFM,Na));
 MAG_SFM=abs(SFM);
-figure(14);
+figure(15);
 stem(VF_aud,MAG_SFM);
 fca = 15000;
 E = designfilt('lowpassfir','FilterOrder',32,'HalfPowerFrequency',fca,'SampleRate',FSa);
@@ -191,26 +191,29 @@ vR = filter(E,sFM);
 vL = decimate(vL,4);
 vR = decimate(vR,4);
 ta2 = decimate(ta,4);
-figure(15);
+%Recuperación de las señales L y R
+wL1= vL+vR; %vL=L+R / 2, vR=L-R / 2 => wL1=vL+vR=L
+wR1= vL-vR; %vL=L+R / 2, vR=L-R / 2 => wR1=vL-vR=R
+figure(16);
 subplot(2,1,1)
 plot(ta,wL);
 xlabel('tiempo (s)');
 ylabel('Amplitud');
 legend('wL');
 subplot(2,1,2)
-plot(ta2,vL);
+plot(ta2,wL1);
 xlabel('tiempo (s)');
 ylabel('Amplitud');
 legend('vL');
 
-figure(16);
+figure(17);
 subplot(2,1,1)
 plot(ta,wR);
 xlabel('tiempo (s)');
 ylabel('Amplitud');
 legend('wR');
 subplot(2,1,2)
-plot(ta2,vR);
+plot(ta2,wR1);
 xlabel('tiempo (s)');
 ylabel('Amplitud');
 legend('vR');
