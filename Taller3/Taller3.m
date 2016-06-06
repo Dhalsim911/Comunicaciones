@@ -27,7 +27,7 @@ dataMod = qammod(xsimb,16,0,'gray');
 scatterplot(dataMod,1,0,'k*')
 
 %%%Parte 4: Canal AWGN banda-base %%%
-snr = 25; %SNR en dB
+snr = 15; %SNR en dB
 rsimb = awgn(dataMod,snr,'measured');
 
 %figure; % Create new figure window.
@@ -41,16 +41,15 @@ hold on
 scatterplot(dataMod,1,0,'k*',sPlotFig)
 
 %%%Parte 5: Demodulación 16-QAM banda-base %%%
-ysimb = qamdemod(rsimb,16,0,'gray');
-yimg = dec2bin(ysimb,4);
-yimgvector = reshape(yimg, [1,307200]);
+ysimb = qamdemod(rsimb,16,0,'gray'); %obtengo los simbolos en el demodulador
+yimg = de2bi(ysimb); %obtengo los binarios correspondientes por simbolo
 
-[numErrors,ber] = biterr(ximgvector,yimgvector);
-fprintf('\nThe binary coding bit error rate = %5.2e, based on %d errors\n', ber,numErrors);
+[numErrors,ber] = biterr(ximg,yimg); %numero de errores
+fprintf('\nSe tiene un BER = %d, con %d errores\n', ber,numErrors);
 
-[m,n] = size(Ximg)
-Yimg = reshape(yimg,m,n);
-%A = logical(Yimg);
-%image(Yimg);
+[m,n] = size(Ximg);
+Yimg = reshape(yimg,m,n); %Redimensiono para crear imagen
+figure;
+imshow(Yimg); %imagen demosulada
 
 
