@@ -7,26 +7,49 @@ Tsim = 4*Tb;
 
 %%% Parte 2: Secuencias de bit de entrada %%%
 imagen = imread('Charmander.png');
-Ximg = im2bw(imagen, 0.5);
+Ximg = im2bw(imagen, 0.35);
 imshow(Ximg);
 
 %%%Parte 3: Modulación 16-QAM banda-base %%%
 ximg = reshape(Ximg,307200/4,4); 
 xsimb = bi2de(ximg);   
 
-
 figure; 
 stem(xsimb(1:250));
 title('Primeros simbolos transmitidos');
 xlabel('Symbol Index');
 ylabel('Integer Value');
+legend('xsimb');
 
 dataMod = qammod(xsimb,16,0,'gray');
 scatterplot(dataMod,1,0,'k*')
-
+REAL = real(dataMod);
+figure;
+stem(REAL(1:600));
+title('Señal X_I');
+xlabel('Symbol Index');
+ylabel('Integer Value');
+IMG = imag(dataMod);
+figure;
+stem(IMG(1:600));
+title('Señal X_Q');
+xlabel('Symbol Index');
+ylabel('Integer Value');
 %%%Parte 4: Canal AWGN banda-base %%%
-snr = 13; %SNR en dB
+snr = 15; %SNR en dB
 rsimb = awgn(dataMod,snr,'measured');
+REAL2 = real(rsimb);
+figure;
+stem(REAL2(1:600));
+title('Señal X_I*');
+xlabel('Symbol Index');
+ylabel('Integer Value');
+IMG2 = imag(rsimb);
+figure;
+stem(IMG2(1:600));
+title('Señal X_Q*');
+xlabel('Symbol Index');
+ylabel('Integer Value');
 
 sPlotFig = scatterplot(rsimb,1,0,'g.');
 hold on
