@@ -41,5 +41,31 @@ n = 7;
 R = 4/7;
 u = n-k;
 %Matriz generadora
-[h,G] = hammgen(u);
+[h,G] = hammgen(u); %Matriz generadora del coodigo G
+x = reshape(ximg,126000/4,4); %matriz de entrada del decodificador
+x = double(x);
+code = encode(x,n,k,'linear/binary',G);
+error2 = randerr(31500,7,[0 4]); %Pueden haber de 0 a 4 errores por bloque de entrada
+noise_blocks2 = code + error2;
+for i = 1:7
+    for j = 1:31500
+        Vx2(j,i) = rem(noise_blocks2(j,i),2);
+    end
+end
 
+%Se procede a decodificar los bloques
+d_code = decode(Vx2,n,k,'linear/binary',G);
+yimg2 = reshape(d_code,1,126000); %se genera un uunico vector a partir de Vx2
+
+berr2 = 0;
+%Se cuenta la cantidad de errores producidos en la imagen por el canal
+for i = 126000
+    bit_diff2 = ximg(1,i)-yimg2(1,i);
+    if bit_diff2 ~= 0
+        berr2 = berr2 + 1;
+    end
+end
+
+Yimg2 = reshape(yimg2,300,420);
+figure(4)
+imshow(Yimg2);
